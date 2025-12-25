@@ -1,0 +1,10 @@
+# Synova AI - Dependencies Installation
+# This file contains all the Python packages your AI platform needs
+
+# Core runtime deps actually used in the codebase
+numpy==1.24.3
+
+# API server (main.py)
+fastapi==0.103.0
+uvicorn==0.23.2
+pydantic==2.3.0
