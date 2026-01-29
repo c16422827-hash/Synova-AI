@@ -40,28 +40,28 @@ def get_conn():
     if os.environ.get('RAILWAY_ENVIRONMENT') or 'DATABASE_URL' in os.environ:
         import psycopg2
         from urllib.parse import urlparse
-
+        
         # Get database URL from Railway's environment variable
         db_url = os.environ.get('DATABASE_URL')
         if not db_url:
             raise ValueError("DATABASE_URL environment variable is not set")
-
+            
         # Retry mechanism for Railway database startup
         max_retries = 10
         retry_delay = 2  # seconds
-
+        
         for attempt in range(max_retries):
             try:
                 # Parse the database URL
                 result = urlparse(db_url)
-
+                
                 # Extract connection parameters
                 dbname = result.path[1:]  # Remove leading '/'
                 user = result.username
                 password = result.password
                 host = result.hostname
                 port = result.port or 5432  # Default PostgreSQL port
-
+                
                 # Connect to PostgreSQL
                 conn = psycopg2.connect(
                     dbname=dbname,
@@ -76,7 +76,7 @@ def get_conn():
                     attempt + 1,
                 )
                 return conn
-
+                
             except Exception as e:
                 logger.warning(
                     "Database connection attempt %d failed: %s",
@@ -97,10 +97,10 @@ def get_conn():
 def init_db():
     conn = get_conn()
     c = conn.cursor()
-
+    
     # Check if we're using PostgreSQL
     is_postgres = 'psycopg2' in str(type(conn))
-
+    
     if is_postgres:
         # PostgreSQL table creation
         c.execute('''
@@ -123,7 +123,7 @@ def init_db():
             timestamp TEXT
         )
         ''')
-
+    
     conn.commit()
     conn.close()
 
@@ -161,10 +161,7 @@ async def chat(req: ChatRequest) -> Dict[str, str]:
 
     tier_responses = {
         'terrestrial': {
-            'greeting': (
-                "Hello! I'm Synova Terrestrial, your free AI assistant. "
-                "How can I help you today?"
-            ),
+            'greeting': "Hello! I'm Synova Terrestrial, your free AI assistant. How can I help you today?",
             'default': "I'm a lightweight demo AI. Ask me about features, jokes, or facts!"
         },
         'aerial': {
@@ -173,9 +170,7 @@ async def chat(req: ChatRequest) -> Dict[str, str]:
         },
         'celestial': {
             'greeting': "Welcome, Celestial user. Premium responses engaged.",
-            'default': (
-                "Celestial (premium) answer: I'll provide the most detailed response I can."
-            )
+            'default': "Celestial (premium) answer: I'll provide the most detailed response I can."
         }
     }
 
@@ -187,19 +182,17 @@ async def chat(req: ChatRequest) -> Dict[str, str]:
     elif 'fact' in ql or 'interesting' in ql:
         response = "Fun fact: Octopuses have three hearts!"
     elif 'weather' in ql:
-        response = (
-            "I can't fetch live weather in this demo, but you can integrate a weather API for that feature."
-        )
+        response = "I can't fetch live weather in this demo, but you can integrate a weather API for that feature."
     else:
         response = tier_responses.get(tier, tier_responses['terrestrial'])['default']
 
     try:
         conn = get_conn()
         c = conn.cursor()
-
+        
         # Check if we're using PostgreSQL for proper placeholder syntax
         is_postgres = 'psycopg2' in str(type(conn))
-
+        
         if is_postgres:
             c.execute(
                 'INSERT INTO messages (tier, query, response, timestamp) '
@@ -212,10 +205,10 @@ async def chat(req: ChatRequest) -> Dict[str, str]:
                 'VALUES (?,?,?,?)',
                 (tier, q, response, datetime.datetime.utcnow().isoformat()),
             )
-
+        
         conn.commit()
         logger.info("Successfully saved message to database")
-
+        
     except Exception as e:
         logger.error("Database error: %s", str(e))
         raise HTTPException(
