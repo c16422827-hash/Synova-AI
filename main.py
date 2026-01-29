@@ -7,6 +7,7 @@ import sqlite3
 import os
 import datetime
 import logging
+import time
 from typing import Dict
 
 # DB path can be overridden for tests using SYNOVA_DB env var
@@ -45,25 +46,42 @@ def get_conn():
         if not db_url:
             raise ValueError("DATABASE_URL environment variable is not set")
             
-        # Parse the database URL
-        result = urlparse(db_url)
+        # Retry mechanism for Railway database startup
+        max_retries = 10
+        retry_delay = 2  # seconds
         
-        # Extract connection parameters
-        dbname = result.path[1:]  # Remove leading '/'
-        user = result.username
-        password = result.password
-        host = result.hostname
-        port = result.port or 5432  # Default PostgreSQL port
-        
-        # Connect to PostgreSQL
-        conn = psycopg2.connect(
-            dbname=dbname,
-            user=user,
-            password=password,
-            host=host,
-            port=port
-        )
-        return conn
+        for attempt in range(max_retries):
+            try:
+                # Parse the database URL
+                result = urlparse(db_url)
+                
+                # Extract connection parameters
+                dbname = result.path[1:]  # Remove leading '/'
+                user = result.username
+                password = result.password
+                host = result.hostname
+                port = result.port or 5432  # Default PostgreSQL port
+                
+                # Connect to PostgreSQL
+                conn = psycopg2.connect(
+                    dbname=dbname,
+                    user=user,
+                    password=password,
+                    host=host,
+                    port=port,
+                    connect_timeout=10
+                )
+                logger.info(f"Successfully connected to PostgreSQL on attempt {attempt + 1}")
+                return conn
+                
+            except Exception as e:
+                logger.warning(f"Database connection attempt {attempt + 1} failed: {str(e)}")
+                if attempt < max_retries - 1:
+                    logger.info(f"Retrying in {retry_delay} seconds...")
+                    time.sleep(retry_delay)
+                else:
+                    logger.error("Max retries reached. Database connection failed.")
+                    raise e
     else:
         # Local SQLite connection
         return sqlite3.connect(DB)
