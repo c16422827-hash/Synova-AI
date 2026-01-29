@@ -27,11 +27,11 @@ def list_messages(
 
 @router.post("/", response_model=MessageResponse, status_code=201)
 def create_message(
-    message: MessageCreate, 
+    message: MessageCreate,
     db: Session = Depends(get_db)
 ):
     """Create a new message."""
-    db_message = Message(**message.dict())
+    db_message = Message(**message.model_dump())
     db.add(db_message)
     db.commit()
     db.refresh(db_message)

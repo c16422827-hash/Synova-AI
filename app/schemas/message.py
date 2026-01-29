@@ -4,15 +4,23 @@ Message-related Pydantic models.
 This module contains Pydantic models for message-related operations.
 """
 from datetime import datetime
+from enum import Enum
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class MessageTier(str, Enum):
+    TERRESTRIAL = "terrestrial"
+    CELESTIAL = "celestial"
+    GALACTIC = "galactic"
 
 
 class MessageBase(BaseModel):
     """Base model for message with common attributes."""
-    tier: str = Field(..., description="Message category/classification")
+    model_config = ConfigDict(from_attributes=True)
+
+    tier: MessageTier = MessageTier.TERRESTRIAL
     query: str = Field(..., description="The user's input query")
-    response: Optional[str] = Field(None, description="System's response to the query")
 
 
 class MessageCreate(MessageBase):
@@ -20,10 +28,14 @@ class MessageCreate(MessageBase):
     pass
 
 
+class MessageUpdate(BaseModel):
+    """Model for updating a message."""
+    response: str
+
+
 class MessageResponse(MessageBase):
     """Model for message response."""
     id: int
-    timestamp: datetime
-
-    class Config:
-        orm_mode = True
+    response: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime

@@ -10,8 +10,9 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/synova_dev
-      - SECRET_KEY=your-secret-key-here
+      - SECRET_KEY=dev-secret-key-change-in-production
       - ENVIRONMENT=development
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8000
     depends_on:
       - db
     restart: unless-stopped
