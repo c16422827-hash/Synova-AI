@@ -11,33 +11,32 @@ sqlalchemy>=2.0.23
 alembic>=1.13.1
 psycopg2-binary>=2.9.9
 
-# AI/ML
-numpy==1.24.3
-pandas==1.5.3
-torch==2.0.1
-transformers==4.33.3
+# AI/ML (optional - for advanced features)
+numpy>=1.24.0
+pandas>=1.5.0
+torch>=2.0.0
+transformers>=4.33.0
 
 # Testing
-pytest==7.4.0
-pytest-cov==4.1.0
-httpx==0.24.1
+pytest>=7.4.0
+pytest-cov>=4.1.0
+httpx>=0.24.0
 
-# Documentation
-mkdocs==1.5.2
-mkdocs-material==9.2.1
+# Documentation (optional)
+mkdocs>=1.5.0
+mkdocs-material>=9.2.0
 
 # Utilities
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
 
 # Optional (for specific features)
-reportlab==4.0.0
-playwright==1.41.1
-Pillow==10.0.1
+reportlab>=4.0.0
+playwright>=1.41.0
+Pillow>=10.0.0
 
 # Development
-black==23.7.0
-isort==5.12.0
-mypy==1.5.1
-flake8==6.1.0
+black>=23.7.0
+isort>=5.12.0
+mypy>=1.5.0
+flake8>=6.1.0
