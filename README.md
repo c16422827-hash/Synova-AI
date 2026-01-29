@@ -23,6 +23,7 @@ Revolutionary AI system with quantum computing, mind-reading capabilities, and a
 ## �️ Tech Stack
 
 ### Backend
+
 - **FastAPI** - Modern Python web framework
 - **PostgreSQL** - Production database
 - **SQLite** - Development database
@@ -30,12 +31,14 @@ Revolutionary AI system with quantum computing, mind-reading capabilities, and a
 - **Pydantic** - Data validation
 
 ### Frontend
+
 - **React Native** - Mobile app framework
 - **Expo** - Development platform
 - **React Navigation** - Navigation library
 - **Axios** - HTTP client
 
 ### DevOps
+
 - **Docker** - Containerization
 - **Railway** - Backend deployment
 - **Vercel** - Frontend deployment
@@ -44,6 +47,7 @@ Revolutionary AI system with quantum computing, mind-reading capabilities, and a
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Python 3.11+
 - Docker (optional)
@@ -184,6 +188,7 @@ npm run test:coverage
 ## 📊 API Documentation
 
 Once the backend is running, visit:
+
 - **Swagger UI**: `http://localhost:8000/docs`
 - **ReDoc**: `http://localhost:8000/redoc`
 

@@ -1,6 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+const colors = {
+  background: '#0A0E27',
+  primary: '#00D9FF',
+  white: '#FFFFFF',
+  button: '#1A1F4B',
+};
+
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -19,37 +26,37 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0A0E27',
+  button: {
     alignItems: 'center',
+    backgroundColor: colors.button,
+    borderRadius: 10,
+    marginVertical: 10,
+    padding: 15,
+    width: '80%',
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  container: {
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    flex: 1,
     justifyContent: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#00D9FF',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
   subtitle: {
+    color: colors.white,
     fontSize: 16,
-    color: '#FFFFFF',
     marginBottom: 40,
     textAlign: 'center',
   },
-  button: {
-    backgroundColor: '#1A1F4B',
-    padding: 15,
-    borderRadius: 10,
-    width: '80%',
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
+  title: {
+    color: colors.primary,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

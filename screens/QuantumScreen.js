@@ -1,6 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
+const colors = {
+  background: '#0A0E27',
+  primary: '#00D9FF',
+  white: '#FFFFFF',
+  button: '#1A1F4B',
+};
+
 export default function QuantumScreen({ navigation }) {
   return (
     <View style={styles.container}>
@@ -24,58 +31,58 @@ export default function QuantumScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0A0E27',
-    padding: 20,
-    paddingTop: 60,
+  backButton: {
+    alignItems: 'center',
+    backgroundColor: colors.button,
+    borderRadius: 10,
+    bottom: 30,
+    left: 20,
+    padding: 15,
+    position: 'absolute',
+    right: 20,
+    width: '100%',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#00D9FF',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  description: {
+  buttonText: {
+    color: colors.white,
     fontSize: 16,
-    color: '#FFFFFF',
-    marginBottom: 30,
-    textAlign: 'center',
-    lineHeight: 24,
+    fontWeight: '600',
   },
   card: {
-    backgroundColor: '#1A1F4B',
-    padding: 20,
+    backgroundColor: colors.button,
     borderRadius: 10,
     marginBottom: 20,
-  },
-  cardTitle: {
-    color: '#00D9FF',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
+    padding: 20,
   },
   cardText: {
-    color: '#FFFFFF',
+    color: colors.white,
     fontSize: 16,
     marginBottom: 10,
     marginLeft: 10,
   },
-  backButton: {
-    backgroundColor: '#1A1F4B',
-    padding: 15,
-    borderRadius: 10,
-    width: '100%',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 30,
-    left: 20,
-    right: 20,
+  cardTitle: {
+    color: colors.primary,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
-  buttonText: {
-    color: '#FFFFFF',
+  container: {
+    backgroundColor: colors.background,
+    flex: 1,
+    padding: 20,
+    paddingTop: 60,
+  },
+  description: {
+    color: colors.white,
     fontSize: 16,
-    fontWeight: '600',
+    lineHeight: 24,
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  title: {
+    color: colors.primary,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
   },
 });

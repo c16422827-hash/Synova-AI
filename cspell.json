@@ -112,9 +112,5 @@
     "XGBoost",
     "yourcompany"
   ],
-  "ignorePaths": [
-    "node_modules/**",
-    "dist/**",
-    "*.log"
-  ]
+  "ignorePaths": ["node_modules/**", "dist/**", "*.log"]
 }
