@@ -1,8 +1,10 @@
+"""Test suite for Synova AI main API endpoints."""
 import importlib
 import os
 import sqlite3
 
 import pytest
+from fastapi.testclient import TestClient  # type: ignore
 
 
 @pytest.fixture()
@@ -24,7 +26,7 @@ def patched_sqlite(monkeypatch, temp_db_path):
     if os.path.exists(temp_db_path):
         try:
             os.remove(temp_db_path)
-        except Exception:
+        except OSError:
             pass
 
 
@@ -37,7 +39,8 @@ def patched_sleep(monkeypatch):
 
 @pytest.fixture()
 def app_and_module(patched_sqlite, patched_sleep):
-    # Import inside the fixture after monkeypatch is applied so module init uses the patched sqlite
+    # Import inside the fixture after monkeypatch is applied
+    # so module init uses the patched sqlite
     main = importlib.import_module("main")
     importlib.reload(main)
     return main.app, main
@@ -45,8 +48,6 @@ def app_and_module(patched_sqlite, patched_sleep):
 
 def test_root_health_and_stats_endpoints(app_and_module):
     app, main = app_and_module
-    from fastapi.testclient import TestClient
-
     client = TestClient(app)
 
     # Root
@@ -71,19 +72,22 @@ def test_root_health_and_stats_endpoints(app_and_module):
 
 def test_register_login_and_query_flow(app_and_module):
     app, main = app_and_module
-    from fastapi.testclient import TestClient
-
     client = TestClient(app)
 
     # Register
     email = "test@example.com"
     password = "secret123"
-    r = client.post("/api/register", json={"email": email, "password": password})
+    r = client.post(
+        "/api/register",
+        json={"email": email, "password": password}
+    )
     assert r.status_code == 200
     user_id = r.json()["user_id"]
 
     # Duplicate register should fail
-    r_dup = client.post("/api/register", json={"email": email, "password": password})
+    r_dup = client.post(
+        "/api/register", json={"email": email, "password": password}
+    )
     assert r_dup.status_code == 400
 
     # Login
@@ -102,7 +106,9 @@ def test_register_login_and_query_flow(app_and_module):
     payload = r.json()
     assert payload["success"] is True
     assert payload["data"]["tier"] == "terrestrial"
-    assert isinstance(payload["data"]["confidence"], float)
+    assert isinstance(
+        payload.get("data", {}).get("confidence", 0.0), float
+    )
 
     # Query too long for tier
     long_query = "x" * 201

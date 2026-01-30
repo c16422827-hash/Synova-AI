@@ -144,6 +144,60 @@ async def root():
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
+@app.get('/api/health')
+async def health_check():
+    """Health check endpoint for monitoring"""
+    try:
+        # Test database connection
+        conn = get_conn()
+        conn.close()
+        
+        return {
+            "status": "healthy",
+            "timestamp": datetime.datetime.utcnow().isoformat(),
+            "database": "connected"
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return {
+            "status": "unhealthy",
+            "timestamp": datetime.datetime.utcnow().isoformat(),
+            "database": "disconnected",
+            "error": str(e)
+        }
+
+
+@app.get('/api/stats')
+async def get_stats():
+    """Get application statistics"""
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        
+        # Count messages by tier
+        c.execute("SELECT tier, COUNT(*) FROM messages GROUP BY tier")
+        tier_counts = dict(c.fetchall())
+        
+        # Get total messages
+        c.execute("SELECT COUNT(*) FROM messages")
+        total_messages = c.fetchone()[0]
+        
+        conn.close()
+        
+        return {
+            "users_by_tier": tier_counts,
+            "total_messages": total_messages,
+            "timestamp": datetime.datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Stats endpoint failed: {e}")
+        return {
+            "users_by_tier": {},
+            "total_messages": 0,
+            "error": str(e)
+        }
+
+
 @app.post('/api/chat')
 async def chat(req: ChatRequest) -> Dict[str, str]:
     q = (req.query or '').strip()
