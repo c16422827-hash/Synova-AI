@@ -17,7 +17,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:md": "markdownlint README.md synova_deployment_guide.md",
-    "prepare": "husky init",
+    "prepare": "husky",
     "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {

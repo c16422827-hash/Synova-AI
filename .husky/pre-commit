@@ -1,8 +1,1 @@
-#!/usr/bin/env sh
-
-# Run linter and formatter
-npm run lint
-npm run prettier
-
-# Add the changes after formatting
-git add .
+npm test
