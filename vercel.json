@@ -17,7 +17,9 @@
     }
   ],
   "env": {
-    "PYTHON_VERSION": "3.11"
+    "PYTHON_VERSION": "3.11",
+    "DATABASE_URL": "@database_url",
+    "SECRET_KEY": "@secret_key"
   },
   "functions": {
     "main.py": {
